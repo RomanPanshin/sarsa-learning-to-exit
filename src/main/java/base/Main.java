@@ -1,7 +1,5 @@
 package base;
 
-import base.ExplorationPolicy;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,7 +11,10 @@ public class Main {
         Map<String, Integer> translate = new HashMap<>();
 
         ControllerCvs contr = new ControllerCvs();
-//        contr.initFile(4 , m*n );
+        contr.initFile(4 , m*n );
+
+        GUI board = new GUI();
+
 
         ExplorationPolicy explorationPolicy = new ExplorationPolicy();
         Sarsa sarsa = new Sarsa(m * n, 4, explorationPolicy, false);
@@ -33,6 +34,7 @@ public class Main {
                 }
             }
             playMap[x][y] = true;
+
             while (true) {
                 String key = Integer.toString(x) + Integer.toString(y);
                 int action = sarsa.GetAction(translate.get(key));
@@ -68,6 +70,18 @@ public class Main {
                 x = buffX;
                 y = buffY;
                 previousAction = action;
+                float[] stateValue = sarsa.getQvaluesSum();
+                float array2d[][] = new float[n][m];
+                float sum = 0;
+                for(int i = 0; i < n*m; i++){
+                    sum += stateValue[i];
+                }
+
+                for(int i=0; i<n; i++)
+                    for(int j=0;j<m; j++)
+                        array2d[i][j] = stateValue[(j*n) + i];
+                board.setBoard(array2d, sum);
+                board.setAgentPosition(x, y);
                 for (int i = 0; i < n; i++) {
                     for (int j = 0; j < m; j++) {
                         if(playMap[i][j])

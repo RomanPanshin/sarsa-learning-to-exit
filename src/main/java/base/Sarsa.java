@@ -14,6 +14,18 @@ public class Sarsa {
     private double discountFactor = 0.95;
     private double learningRate = 0.25;
 
+    public float[] getQvaluesSum(){
+        float[] result = new float[states];
+        for ( int i = 0; i < this.states; i++ ){
+           float sum = 0;
+           for ( int j = 0; j < this.actions; j++ ) {
+               sum += this.qvalues[i][j];
+           }
+           result[i] = sum;
+        }
+        return result;
+    }
+
     public void setQvalues(double[][] qvalues) {
         this.qvalues = qvalues;
         System.out.println(this.qvalues);
